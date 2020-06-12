@@ -17,41 +17,43 @@ sequelize
   .authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
-
+    fetchData();
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);
   });
 
-http.get(dataUrl, { encoding: null }, async res => {
-  await Book.sync({ force: true });
-  res
-    .pipe(unzip)
-    .on('entry', tarFile => tarFile
-      .pipe(untar)
-      .on('entry', (header, stream, next) => {
-        const chunks = [];
-        stream.on('data', data => chunks.push(data));
-        stream.on('end', async () => {
-          const entry = Buffer.concat(chunks).toString('utf8');
-          try {
-            const payload = await parseXML(entry);
-            const [, created] = await Book.findOrCreate({
-              where: {
-                id: payload.id
-              },
-              defaults: payload
-            });
-            if (!created) {
-              console.log('Book already exists');
-            } else {
-              console.log(`Created book: ${payload.id}`);
+function fetchData() {
+  http.get(dataUrl, { encoding: null }, async res => {
+    await Book.sync({ force: true });
+    res
+      .pipe(unzip)
+      .on('entry', tarFile => tarFile
+        .pipe(untar)
+        .on('entry', (header, stream, next) => {
+          const chunks = [];
+          stream.on('data', data => chunks.push(data));
+          stream.on('end', async () => {
+            const entry = Buffer.concat(chunks).toString('utf8');
+            try {
+              const payload = await parseXML(entry);
+              const [, created] = await Book.findOrCreate({
+                where: {
+                  id: payload.id
+                },
+                defaults: payload
+              });
+              if (!created) {
+                console.log('Book already exists');
+              } else {
+                console.log(`Created book: ${payload.id}`);
+              }
+            } catch (e) {
+              console.error(e);
             }
-          } catch (e) {
-            console.error(e);
-          }
-          next();
-        });
-      })
-    );
-}).on('error', console.error);
+            next();
+          });
+        })
+      );
+  }).on('error', console.error);
+}
