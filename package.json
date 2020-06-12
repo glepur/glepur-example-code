@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --bail --watchAll"
+    "test": "jest --bail --watchAll",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
