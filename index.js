@@ -2,7 +2,7 @@ const http = require('http');
 const unzip = require('unzip-stream').Parse();
 const untar = require('tar-stream').extract();
 const Sequelize = require('sequelize');
-const utils = require('./utils');
+const { parseXML } = require('./utils');
 const { db, dataUrl } = require('./config');
 
 const sequelize = new Sequelize(db.name, db.user, db.password, {

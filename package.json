@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --bail --watchAll"
   },
   "author": "",
   "license": "ISC",
@@ -15,5 +15,8 @@
     "tar-stream": "^2.1.2",
     "unzip-stream": "^0.3.0",
     "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "jest": "^26.0.1"
   }
 }
