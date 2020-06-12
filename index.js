@@ -35,7 +35,7 @@ http.get(dataUrl, { encoding: null }, async res => {
         stream.on('end', async () => {
           const entry = Buffer.concat(chunks).toString('utf8');
           try {
-            const payload = await utils.parseXML(entry);
+            const payload = await parseXML(entry);
             const [, created] = await Book.findOrCreate({
               where: {
                 id: payload.id
