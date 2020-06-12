@@ -2,7 +2,6 @@ const http = require('http');
 const unzip = require('unzip-stream').Parse();
 const untar = require('tar-stream').extract();
 const Sequelize = require('sequelize');
-const Model = Sequelize.Model;
 const utils = require('./utils');
 const { db, dataUrl } = require('./config');
 
@@ -12,38 +11,7 @@ const sequelize = new Sequelize(db.name, db.user, db.password, {
   logging: false
 });
 
-class Book extends Model { }
-Book.init({
-  id: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    primaryKey: true
-  },
-  title: {
-    type: Sequelize.TEXT
-  },
-  authors: {
-    type: Sequelize.TEXT
-  },
-  publisher: {
-    type: Sequelize.STRING
-  },
-  publicationDate: {
-    type: Sequelize.DATEONLY
-  },
-  language: {
-    type: Sequelize.STRING
-  },
-  subjects: {
-    type: Sequelize.TEXT
-  },
-  license: {
-    type: Sequelize.STRING
-  }
-}, {
-  sequelize,
-  modelName: 'book'
-});
+const Book = require('./model').init(sequelize);
 
 sequelize
   .authenticate()
